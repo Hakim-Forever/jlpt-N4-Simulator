@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JLPT N4 Simulator | Belajar Bahasa Jepang</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        fadeIn: 'fadeIn 0.5s ease-in-out',
+                        slideIn: 'slideIn 0.3s ease-out',
+                        bounceIn: 'bounceIn 0.6s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '60%': { transform: 'scale(1.05)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f97316;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        /* Smooth transitions */
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 max-w-7xl flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🎌</span>
+                <span class="font-bold text-xl text-gray-800 dark:text-white">JLPT N4 Simulator</span>
+            </div>
+            <button id="darkModeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Main Content akan diisi JavaScript -->
+        <div id="app"></div>
+    </div>
+
+    <script>
+        // ==================== DATA SOAL JLPT N4 SUPER DETAIL ====================
+        const questions = [
+            {
+                id: 1,
+                category: 'kanji',
+                categoryName: '📖 Kanji',
+                question: '「電車」の正しい読み方はどれですか？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'でんしゃ' },
+                    { label: 'B', value: 'b', text: 'でんちゃ' },
+                    { label: 'C', value: 'c', text: 'でんじゃ' },
+                    { label: 'D', value: 'd', text: 'でんしや' }
+                ],
+                answer: 'a',
+                explanation: {
+                    correctAnswer: 'A',
+                    reading: { kanji: '電車', furigana: 'でんしゃ', romaji: 'densha' },
+                    translation: 'Kereta listrik',
+                    perWordMeaning: [
+                        { word: '電', reading: 'でん', romaji: 'den', meaning: 'listrik' },
+                        { word: '車', reading: 'しゃ', romaji: 'sha', meaning: 'kendaraan' }
+                    ],
+                    grammar: { pattern: 'Kanji majemuk (二字熟語)', explanation: '電 (listrik) + 車 (kendaraan) = kereta listrik', usage: 'Digunakan untuk kereta listrik di Jepang.' },
+                    whyCorrect: 'Cara baca yang benar adalah でんしゃ (densha).',
+                    whyWrong: { B: 'でんちゃ ❌ – Perubahan bunyi tidak terjadi.', C: 'でんじゃ ❌ – Tidak ada bunyi "j".', D: 'でんしや ❌ – Dua suku kata terpisah.' },
+                    tips: 'Ingat: 車 bisa dibaca くるま (mobil) atau しゃ (kendaraan).',
+                    difficulty: 'Mudah'
+                }
+            },
+            {
+                id: 2,
+                category: 'kanji',
+                categoryName: '📖 Kanji',
+                question: '「毎日」の正しい読み方はどれですか？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'まいにち' },
+                    { label: 'B', value: 'b', text: 'まえにち' },
+                    { label: 'C', value: 'c', text: 'まいひ' },
+                    { label: 'D', value: 'd', text: 'まいにち' }
+                ],
+                answer: 'a',
+                explanation: {
+                    correctAnswer: 'A',
+                    reading: { kanji: '毎日', furigana: 'まいにち', romaji: 'mainichi' },
+                    translation: 'Setiap hari',
+                    perWordMeaning: [
+                        { word: '毎', reading: 'まい', romaji: 'mai', meaning: 'setiap' },
+                        { word: '日', reading: 'にち', romaji: 'nichi', meaning: 'hari' }
+                    ],
+                    grammar: { pattern: '毎 + 日', explanation: '毎 = setiap, 日 = hari', usage: 'Untuk aktivitas rutin harian.' },
+                    whyCorrect: '毎日 dibaca まいにち (mainichi).',
+                    whyWrong: { B: 'まえにち ❌ – 毎 tidak dibaca まえ.', C: 'まいひ ❌ – 日 berdiri sendiri dibaca ひ.' },
+                    tips: 'Hafalkan: 毎週 (mingguan), 毎年 (tahunan), 毎朝 (setiap pagi).',
+                    difficulty: 'Mudah'
+                }
+            },
+            {
+                id: 3,
+                category: 'vocabulary',
+                categoryName: '📚 Kosakata',
+                question: '「あした」の意味は？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'Kemarin' },
+                    { label: 'B', value: 'b', text: 'Hari ini' },
+                    { label: 'C', value: 'c', text: 'Besok' },
+                    { label: 'D', value: 'd', text: 'Lusa' }
+                ],
+                answer: 'c',
+                explanation: {
+                    correctAnswer: 'C',
+                    reading: { kanji: '明日', furigana: 'あした', romaji: 'ashita' },
+                    translation: 'Besok',
+                    perWordMeaning: [{ word: '明日', reading: 'あした', romaji: 'ashita', meaning: 'besok' }],
+                    grammar: { pattern: 'Kata keterangan waktu', explanation: 'あした = besok', usage: 'Letakkan di awal kalimat.' },
+                    whyCorrect: 'あした adalah kata Jepang untuk BESOK.',
+                    whyWrong: { A: 'Kemarin = 昨日 (きのう)', B: 'Hari ini = 今日 (きょう)', D: 'Lusa = 明後日 (あさって)' },
+                    tips: 'Ingat tiga waktu: 昨日 (kemarin), 今日 (hari ini), 明日 (besok).',
+                    difficulty: 'Mudah'
+                }
+            },
+            {
+                id: 4,
+                category: 'particle',
+                categoryName: '🔤 Partikel',
+                question: '「私は毎朝６時＿＿＿起きます。」正しい助詞は？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'が' },
+                    { label: 'B', value: 'b', text: 'を' },
+                    { label: 'C', value: 'c', text: 'に' },
+                    { label: 'D', value: 'd', text: 'で' }
+                ],
+                answer: 'c',
+                explanation: {
+                    correctAnswer: 'C',
+                    reading: { kanji: '私は毎朝６時に起きます。', furigana: 'わたしはまいあさろくじにおきます。', romaji: 'Watashi wa maiasa rokuji ni okimasu.' },
+                    translation: 'Saya bangun jam 6 setiap pagi.',
+                    perWordMeaning: [
+                        { word: '私', reading: 'わたし', romaji: 'watashi', meaning: 'saya' },
+                        { word: '毎朝', reading: 'まいあさ', romaji: 'maiasa', meaning: 'setiap pagi' },
+                        { word: '６時', reading: 'ろくじ', romaji: 'rokuji', meaning: 'jam 6' },
+                        { word: '起きます', reading: 'おきます', romaji: 'okimasu', meaning: 'bangun' }
+                    ],
+                    grammar: { pattern: '[Waktu] + に + [Kegiatan]', explanation: 'Partikel ニ menunjukkan waktu spesifik terjadinya aksi.', usage: 'Gunakan に setelah angka jam, hari, tanggal.' },
+                    whyCorrect: '6時 adalah angka waktu spesifik → pakai に.',
+                    whyWrong: { A: 'が ❌ – Penanda subjek.', B: 'を ❌ – Penanda objek.', D: 'で ❌ – Penanda tempat/alat.' },
+                    tips: 'Ingat: に = "pada jam/hari/tanggal tertentu".',
+                    difficulty: 'Menengah'
+                }
+            },
+            {
+                id: 5,
+                category: 'verb',
+                categoryName: '⚡ Bentuk Kata Kerja',
+                question: '「食べる」の「て形」はどれですか？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: '食べって' },
+                    { label: 'B', value: 'b', text: '食べて' },
+                    { label: 'C', value: 'c', text: '食べんで' },
+                    { label: 'D', value: 'd', text: '食べりて' }
+                ],
+                answer: 'b',
+                explanation: {
+                    correctAnswer: 'B',
+                    reading: { kanji: '食べる → 食べて', furigana: 'たべる → たべて', romaji: 'taberu → tabete' },
+                    translation: 'Makan (bentuk TE)',
+                    perWordMeaning: [
+                        { word: '食べる', reading: 'たべる', romaji: 'taberu', meaning: 'makan (bentuk biasa)' },
+                        { word: '食べて', reading: 'たべて', romaji: 'tabete', meaning: 'makan - bentuk TE' }
+                    ],
+                    grammar: { pattern: 'Group 2 (Ichidan): る → て', explanation: 'Ichidan verb: hapus る, tambah て', usage: 'Bentuk TE untuk: permintaan, menghubungkan kata kerja, sedang melakukan.' },
+                    whyCorrect: '食べる → る dihapus → tambah て → 食べて',
+                    whyWrong: { A: '食べって ❌ – Pola untuk godan verb seperti 待つ.', C: '食べんで ❌ – Pola untuk godan verb 飲む.', D: '食べりて ❌ – Tidak ada pola.' },
+                    tips: 'Ciri ichidan: sebelum る ada i/e. Contoh: 見る (miru), 開ける (akeru).',
+                    difficulty: 'Menengah'
+                }
+            },
+            {
+                id: 6,
+                category: 'reading',
+                categoryName: '📄 Membaca',
+                question: '次の文を読んで答えなさい：「私は毎日図書館で勉強します。図書館は静かで、集中できます。」\n\nこの人が勉強する場所はどこですか？',
+                furigana: 'つぎのぶんをよんでこたえなさい：「わたしはまいにちとしょかんでべんきょうします。としょかんはしずかで、しゅうちゅうできます。」\n\nこのひとがべんきょうするばしょはどこですか？',
+                options: [
+                    { label: 'A', value: 'a', text: 'カフェ' },
+                    { label: 'B', value: 'b', text: '家' },
+                    { label: 'C', value: 'c', text: '図書館' },
+                    { label: 'D', value: 'd', text: '学校' }
+                ],
+                answer: 'c',
+                explanation: {
+                    correctAnswer: 'C',
+                    reading: { kanji: '私は毎日図書館で勉強します。図書館は静かで集中できます。', furigana: 'わたしはまいにちとしょかんでべんきょうします。としょかんはしずかでしゅうちゅうできます。', romaji: 'Watashi wa mainichi toshokan de benkyou shimasu. Toshokan wa shizuka de shuuchuu dekimasu.' },
+                    translation: 'Saya belajar di perpustakaan setiap hari. Perpustakaan itu sepi dan saya bisa fokus.',
+                    perWordMeaning: [
+                        { word: '毎日', reading: 'まいにち', romaji: 'mainichi', meaning: 'setiap hari' },
+                        { word: '図書館', reading: 'としょかん', romaji: 'toshokan', meaning: 'perpustakaan' },
+                        { word: '勉強します', reading: 'べんきょうします', romaji: 'benkyou shimasu', meaning: 'belajar' }
+                    ],
+                    grammar: { pattern: '～で勉強します', explanation: 'Partikel で menunjukkan TEMPAT aktivitas.', usage: '[Tempat] + で + [Aktivitas]' },
+                    whyCorrect: 'Kalimat pertama: 図書館で勉強します (belajar di perpustakaan).',
+                    whyWrong: { A: 'カフェ ❌ – Tidak disebut.', B: '家 ❌ – Tidak disebut.', D: '学校 ❌ – Tidak disebut.' },
+                    tips: 'Cari kata kunci: tempat + で + aktivitas.',
+                    difficulty: 'Mudah'
+                }
+            },
+            {
+                id: 7,
+                category: 'verb',
+                categoryName: '⚡ Bentuk Kata Kerja',
+                question: '「書く」の「ない形」はどれですか？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: '書かない' },
+                    { label: 'B', value: 'b', text: '書かないい' },
+                    { label: 'C', value: 'c', text: '書かあない' },
+                    { label: 'D', value: 'd', text: '書きない' }
+                ],
+                answer: 'a',
+                explanation: {
+                    correctAnswer: 'A',
+                    reading: { kanji: '書く → 書かない', furigana: 'かく → かかない', romaji: 'kaku → kakanai' },
+                    translation: 'Menulis → tidak menulis',
+                    perWordMeaning: [
+                        { word: '書く', reading: 'かく', romaji: 'kaku', meaning: 'menulis' },
+                        { word: '書かない', reading: 'かかない', romaji: 'kakanai', meaning: 'tidak menulis' }
+                    ],
+                    grammar: { pattern: 'Godan verb (う-ending): ubah akhiran ke あ + ない', explanation: '書く (kaku) → く → か + ない = 書かない', usage: 'ない形 untuk kalimat negatif biasa.' },
+                    whyCorrect: '書く adalah godan verb (akhiran く) → か + ない.',
+                    whyWrong: { B: '書かないい ❌ – Kelebihan い.', C: '書かあない ❌ – Vokal panjang tidak perlu.', D: '書きない ❌ – Ini bentuk masu negatif (書きません).' },
+                    tips: 'Ingat: nai form = akhiran ke baris あ + ない. Kecuali う jadi わ.',
+                    difficulty: 'Menengah'
+                }
+            },
+            {
+                id: 8,
+                category: 'grammar',
+                categoryName: '✍️ Grammar',
+                question: '「わたしはすし＿＿＿たべたいです。」正しい助詞は？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'は' },
+                    { label: 'B', value: 'b', text: 'が' },
+                    { label: 'C', value: 'c', text: 'を' },
+                    { label: 'D', value: 'd', text: 'に' }
+                ],
+                answer: 'b',
+                explanation: {
+                    correctAnswer: 'B',
+                    reading: { kanji: '私は寿司が食べたいです。', furigana: 'わたしはすしがたべたいです。', romaji: 'Watashi wa sushi ga tabetai desu.' },
+                    translation: 'Saya ingin makan sushi.',
+                    perWordMeaning: [
+                        { word: '私', reading: 'わたし', romaji: 'watashi', meaning: 'saya' },
+                        { word: '寿司', reading: 'すし', romaji: 'sushi', meaning: 'sushi' },
+                        { word: '食べたい', reading: 'たべたい', romaji: 'tabetai', meaning: 'ingin makan' }
+                    ],
+                    grammar: { pattern: '[Benda] + が + [Kata Kerja bentuk たい]', explanation: '～たい = ingin melakukan. Objek yang diinginkan pakai が.', usage: 'Gunakan untuk menyatakan keinginan.' },
+                    whyCorrect: 'Objek yang diinginkan (sushi) pakai が karena 食べたい adalah kata sifat keinginan.',
+                    whyWrong: { A: 'は ❌ – Penanda topik.', C: 'を ❌ – JLPT N4 lebih suka が.', D: 'に ❌ – Penanda waktu/tujuan.' },
+                    tips: 'Ingat: たい = ingin. Objeknya pakai が.',
+                    difficulty: 'Menengah'
+                }
+            },
+            {
+                id: 9,
+                category: 'listening',
+                categoryName: '🎧 Listening',
+                question: '[DUMMY LISTENING] 音声: 「明日は雨が降るそうです。」\n\n天気はどうなりそうですか？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: '晴れ' },
+                    { label: 'B', value: 'b', text: '雨' },
+                    { label: 'C', value: 'c', text: '曇り' },
+                    { label: 'D', value: 'd', text: '雪' }
+                ],
+                answer: 'b',
+                explanation: {
+                    correctAnswer: 'B',
+                    reading: { kanji: '明日は雨が降るそうです。', furigana: 'あしたはあめがふるそうです。', romaji: 'Ashita wa ame ga furu sou desu.' },
+                    translation: '"Kata orang besok akan hujan." → Cuaca bagaimana?',
+                    perWordMeaning: [
+                        { word: '明日', reading: 'あした', romaji: 'ashita', meaning: 'besok' },
+                        { word: '雨', reading: 'あめ', romaji: 'ame', meaning: 'hujan' },
+                        { word: '降る', reading: 'ふる', romaji: 'furu', meaning: 'turun (hujan)' }
+                    ],
+                    grammar: { pattern: '[Kalimat biasa] + そうです', explanation: '～そうです = "saya dengar / kata orang"', usage: 'Menyampaikan informasi dari orang lain.' },
+                    whyCorrect: 'Kalimat mengatakan 雨が降るそうです → jawaban 雨.',
+                    whyWrong: { A: '晴れ ❌ – Tidak sesuai.', C: '曇り ❌ – Tidak disebut.', D: '雪 ❌ – Tidak disebut.' },
+                    tips: 'Perhatikan kata そうです (kata orang) → kunci informasi dari orang lain.',
+                    difficulty: 'Mudah'
+                }
+            },
+            {
+                id: 10,
+                category: 'grammar',
+                categoryName: '✍️ Grammar',
+                question: '「宿題を忘れてしまいました。」の意味は？',
+                furigana: '',
+                options: [
+                    { label: 'A', value: 'a', text: 'Saya lupa pekerjaan rumah' },
+                    { label: 'B', value: 'b', text: 'Saya sengaja melupakan PR' },
+                    { label: 'C', value: 'c', text: 'Saya tidak sengaja lupa PR (menyesal)' },
+                    { label: 'D', value: 'd', text: 'Saya akan lupa PR' }
+                ],
+                answer: 'c',
+                explanation: {
+                    correctAnswer: 'C',
+                    reading: { kanji: '宿題を忘れてしまいました。', furigana: 'しゅくだいをわすれてしまいました。', romaji: 'Shukudai o wasurete shimaimashita.' },
+                    translation: 'Saya (tidak sengaja) lupa PR (dan menyesal).',
+                    perWordMeaning: [
+                        { word: '宿題', reading: 'しゅくだい', romaji: 'shukudai', meaning: 'pekerjaan rumah' },
+                        { word: '忘れて', reading: 'わすれて', romaji: 'wasurete', meaning: 'lupa (bentuk TE)' },
+                        { word: 'しまいました', reading: 'しまいました', romaji: 'shimaimashita', meaning: 'telah selesai dengan penyesalan' }
+                    ],
+                    grammar: { pattern: '[Bentuk te] + しまう', explanation: 'Bentuk TE + しまう = (1) menyelesaikan, (2) tidak sengaja, (3) penyesalan.', usage: 'Bentuk sopan lampau: てしまいました.' },
+                    whyCorrect: 'Dalam konteks lupa PR, てしまう menunjukkan penyesalan karena tidak sengaja.',
+                    whyWrong: { A: '❌ – Tidak menangkap nuansa penyesalan.', B: '❌ – てしまう tidak berarti sengaja.', D: '❌ – Ini bentuk lampau (sudah terjadi).' },
+                    tips: 'Kalau lihat てしまった = tidak sengaja dan menyesal.',
+                    difficulty: 'Sulit'
+                }
+            }
+        ];
+
+        // ==================== STATE & FUNCTIONS ====================
+        let currentIndex = 0;
+        let answers = {};
+        let isExamStarted = false;
+        let examCompleted = false;
+
+        // DOM Elements
+        const app = document.getElementById('app');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        // Dark Mode
+        let isDarkMode = localStorage.getItem('theme') === 'dark';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            darkModeToggle.innerHTML = '☀️';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                darkModeToggle.innerHTML = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                darkModeToggle.innerHTML = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Helper Functions
+        const getScore = () => {
+            return Object.values(answers).filter(a => a.isCorrect).length;
+        };
+
+        const getAnsweredCount = () => {
+            return Object.keys(answers).length;
+        };
+
+        const handleAnswer = (questionId, selectedValue, selectedLabel, isCorrect) => {
+            if (answers[questionId]) return;
+            const question = questions.find(q => q.id === questionId);
+            answers[questionId] = {
+                selected: selectedLabel,
+                selectedValue: selectedValue,
+                isCorrect: isCorrect,
+                question: question
+            };
+            render();
+        };
+
+        const handleNext = () => {
+            if (currentIndex + 1 < questions.length) {
+                currentIndex++;
+                render();
+            } else {
+                examCompleted = true;
+                render();
+            }
+        };
+
+        const handleRestart = () => {
+            isExamStarted = false;
+            examCompleted = false;
+            currentIndex = 0;
+            answers = {};
+            render();
+        };
+
+        const handleStartExam = () => {
+            isExamStarted = true;
+            examCompleted = false;
+            currentIndex = 0;
+            answers = {};
+            render();
+        };
+
+        const jumpToQuestion = (index) => {
+            currentIndex = index;
+            render();
+        };
+
+        // Render Functions
+        const renderExplanation = (question, selectedAnswer, isCorrect) => {
+            const exp = question.explanation;
+            if (!exp) return '<div class="text-red-500">Penjelasan tidak tersedia</div>';
+
+            // Get correct option text
+            const correctOption = question.options.find(opt => opt.value === question.answer);
+            
+            return `
+                <div class="mt-6 p-5 bg-blue-50 dark:bg-blue-900/20 rounded-xl animate-fadeIn border-l-4 border-blue-500">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-2xl">💡</span>
+                        <div class="flex-1 space-y-4">
+                            <!-- 1. Jawaban Benar -->
+                            <div>
+                                <span class="font-bold text-green-600 dark:text-green-400 text-lg">✓ Jawaban Benar:</span>
+                                <span class="text-gray-800 dark:text-gray-200 ml-2 font-semibold">${exp.correctAnswer} (${correctOption?.text || ''})</span>
+                            </div>
+                            
+                            <!-- 2. Cara Membaca -->
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded-lg">
+                                <span class="font-bold text-purple-600 dark:text-purple-400">🔊 Cara Membaca:</span>
+                                <div class="mt-2 space-y-1 font-mono text-sm">
+                                    <div>Kanji: ${exp.reading?.kanji || question.question}</div>
+                                    <div>Furigana: ${exp.reading?.furigana || '-'}</div>
+                                    <div>Romaji: ${exp.reading?.romaji || '-'}</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 3. Arti Kalimat -->
+                            <div>
+                                <span class="font-bold text-blue-600 dark:text-blue-400">📖 Arti Kalimat:</span>
+                                <p class="text-gray-700 dark:text-gray-300 mt-1">${exp.translation}</p>
+                            </div>
+                            
+                            <!-- 4. Arti Per Kata -->
+                            <div>
+                                <span class="font-bold text-indigo-600 dark:text-indigo-400">📝 Arti Per Kata:</span>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                                    ${exp.perWordMeaning?.map(word => `
+                                        <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded text-sm">
+                                            <span class="font-japanese">${word.word}</span>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400"> (${word.reading})</span>
+                                            <div class="text-gray-600 dark:text-gray-300">= ${word.meaning}</div>
+                                        </div>
+                                    `).join('') || ''}
+                                </div>
+                            </div>
+                            
+                            <!-- 5. Penjelasan Grammar -->
+                            ${exp.grammar ? `
+                            <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                                <span class="font-bold text-green-600 dark:text-green-400">📚 Penjelasan Grammar:</span>
+                                <p class="text-gray-700 dark:text-gray-300 mt-1"><span class="font-semibold">Pola:</span> ${exp.grammar.pattern}</p>
+                                <p class="text-gray-700 dark:text-gray-300 mt-1">${exp.grammar.explanation}</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">💬 Penggunaan: ${exp.grammar.usage}</p>
+                            </div>
+                            ` : ''}
+                            
+                            <!-- 6. Kenapa Jawaban Ini Benar -->
+                            <div>
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400">✅ Kenapa Jawaban Ini Benar:</span>
+                                <p class="text-gray-700 dark:text-gray-300 mt-1">${exp.whyCorrect}</p>
+                            </div>
+                            
+                            <!-- 7. Kenapa Pilihan Lain Salah -->
+                            <div>
+                                <span class="font-bold text-red-600 dark:text-red-400">❌ Kenapa Pilihan Lain Salah:</span>
+                                <div class="mt-2 space-y-1">
+                                    ${Object.entries(exp.whyWrong || {}).map(([key, val]) => `
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">• Opsi ${key}: ${val}</p>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <!-- 8. Tips Menghafal -->
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
+                                <span class="font-bold text-yellow-600 dark:text-yellow-400">💪 Tips Menghafal:</span>
+                                <p class="text-gray-700 dark:text-gray-300 mt-1">${exp.tips}</p>
+                            </div>
+                            
+                            <!-- 9. Tingkat Kesulitan -->
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-gray-600 dark:text-gray-400">⭐ Tingkat Kesulitan:</span>
+                                <span class="px-2 py-1 rounded-full text-sm ${exp.difficulty === 'Mudah' ? 'bg-green-100 text-green-700' : exp.difficulty === 'Menengah' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}">${exp.difficulty}</span>
+                            </div>
+                            
+                            <!-- 10. Kategori -->
+                            <div>
+                                <span class="font-bold text-gray-600 dark:text-gray-400">🏷️ Kategori:</span>
+                                <span class="ml-2">${question.categoryName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderHome = () => {
+            const score = getScore();
+            const answered = getAnsweredCount();
+            const percentage = questions.length > 0 ? (answered / questions.length) * 100 : 0;
+            
+            return `
+                <div class="space-y-8 animate-fadeIn">
+                    <!-- Hero -->
+                    <div class="text-center mb-12">
+                        <div class="inline-block p-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full mb-4">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent mb-4">
+                            JLPT N4 Simulator
+                        </h1>
+                        <p class="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+                            Persiapan ujian bahasa Jepang level N4 dengan soal-soal berkualitas dan penjelasan super detail
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Stats Card -->
+                        <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">📊 Progress Belajar</h3>
+                            <div class="mb-6">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-gray-600 dark:text-gray-300">Skor Keseluruhan</span>
+                                    <span class="font-bold text-2xl text-orange-500">${Math.round(percentage)}%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                                    <div class="bg-gradient-to-r from-orange-500 to-red-500 h-3 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                                    <div class="text-2xl font-bold text-blue-600">${answered}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Soal Terjawab</div>
+                                </div>
+                                <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                                    <div class="text-2xl font-bold text-green-600">${score}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Jawaban Benar</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Start Button Card -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">🎯 Mulai Ujian</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">${questions.length} soal siap menguji kemampuan N4 Anda</p>
+                            <button onclick="window.handleStartExam()" class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                                🚀 Mulai Ujian Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderExam = () => {
+            if (examCompleted) {
+                const score = getScore();
+                const total = questions.length;
+                const percentage = (score / total) * 100;
+                let message = '';
+                let color = '';
+                if (percentage >= 80) { message = '🎉 Luar biasa! Anda siap ujian N4!'; color = 'text-green-600'; }
+                else if (percentage >= 60) { message = '👍 Bagus! Sedikit lagi tingkatkan latihan.'; color = 'text-blue-600'; }
+                else { message = '💪 Terus semangat! Latihan lagi ya.'; color = 'text-orange-600'; }
+                
+                return `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 animate-fadeIn text-center">
+                        <div class="text-6xl mb-4">📊</div>
+                        <h2 class="text-3xl font-bold mb-4">Ujian Selesai!</h2>
+                        <div class="text-5xl font-bold mb-2">${score} / ${total}</div>
+                        <div class="${color} text-xl mb-6">${message}</div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-6">
+                            <div class="bg-gradient-to-r from-green-500 to-blue-500 h-4 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
+                        </div>
+                        <button onclick="window.handleRestart()" class="bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-8 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                            Latihan Lagi
+                        </button>
+                    </div>
+                `;
+            }
+            
+            const question = questions[currentIndex];
+            const answered = answers[question.id];
+            const isAnswered = !!answered;
+            
+            const categoryColors = {
+                kanji: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+                vocabulary: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+                grammar: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+                reading: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+                particle: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
+                verb: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+                listening: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+            };
+            
+            return `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Question Card -->
+                    <div class="lg:col-span-3">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden animate-slideIn">
+                            <div class="h-2 bg-gray-200 dark:bg-gray-700">
+                                <div class="h-full bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-500" style="width: ${((currentIndex + 1) / questions.length) * 100}%"></div>
+                            </div>
+                            <div class="p-6 md:p-8">
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="px-3 py-1 rounded-full text-sm font-semibold ${categoryColors[question.category]}">
+                                            ${question.categoryName}
+                                        </span>
+                                        <span class="text-gray-500 dark:text-gray-400 text-sm">Soal ${currentIndex + 1} / ${questions.length}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        ${[1,2,3].map(i => `<div class="w-2 h-2 rounded-full ${i <= (question.explanation.difficulty === 'Mudah' ? 1 : question.explanation.difficulty === 'Menengah' ? 2 : 3) ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'}"></div>`).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-8">
+                                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-3">${question.question}</h3>
+                                    ${question.furigana ? `<p class="text-gray-500 dark:text-gray-400 text-sm">${question.furigana}</p>` : ''}
+                                </div>
+                                
+                                <div class="space-y-3 mb-8">
+                                    ${question.options.map(opt => {
+                                        let optionClass = "border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600";
+                                        const isSelected = isAnswered && answered.selectedValue === opt.value;
+                                        const isCorrectOpt = opt.value === question.answer;
+                                        
+                                        if (isAnswered && isCorrectOpt) {
+                                            optionClass = "border-2 border-green-500 bg-green-50 dark:bg-green-900/20";
+                                        } else if (isAnswered && isSelected && !isCorrectOpt) {
+                                            optionClass = "border-2 border-red-500 bg-red-50 dark:bg-red-900/20";
+                                        } else if (isSelected) {
+                                            optionClass = "border-2 border-orange-500 bg-orange-50 dark:bg-orange-900/20";
+                                        }
+                                        
+                                        return `
+                                            <button onclick="window.handleAnswer(${question.id}, '${opt.value}', '${opt.label}', ${opt.value === question.answer})" 
+                                                ${isAnswered ? 'disabled' : ''}
+                                                class="w-full text-left p-4 rounded-xl transition-all duration-300 ${optionClass} ${!isAnswered && 'hover:shadow-md transform hover:scale-[1.02]'}">
+                                                <div class="flex items-start space-x-3">
+                                                    <span class="font-bold text-gray-600 dark:text-gray-400 min-w-[30px]">${opt.label}.</span>
+                                                    <span class="text-gray-700 dark:text-gray-200 flex-1">${opt.text}</span>
+                                                    ${isAnswered && isCorrectOpt ? '<span class="text-green-500 text-xl">✓</span>' : ''}
+                                                    ${isAnswered && isSelected && !isCorrectOpt ? '<span class="text-red-500 text-xl">✗</span>' : ''}
+                                                </div>
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                                
+                                ${isAnswered ? renderExplanation(question, answered, answered.isCorrect) : ''}
+                                
+                                ${isAnswered ? `
+                                    <button onclick="window.handleNext()" 
+                                        class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2">
+                                        <span>${currentIndex + 1 === questions.length ? 'Selesai' : 'Soal Selanjutnya'}</span>
+                                        <span>→</span>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 h-fit sticky top-20">
+                        <h3 class="font-bold text-gray-800 dark:text-white mb-4 text-center">📋 Daftar Soal</h3>
+                        <div class="grid grid-cols-5 gap-2 mb-4">
+                            ${questions.map((q, idx) => {
+                                const isAnsweredQ = answers[q.id];
+                                let btnClass = "w-10 h-10 rounded-lg font-semibold transition-all duration-200";
+                                if (isAnsweredQ) {
+                                    btnClass += isAnsweredQ.isCorrect ? ' bg-green-500 text-white' : ' bg-red-500 text-white';
+                                } else {
+                                    btnClass += ' bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600';
+                                }
+                                if (idx === currentIndex) btnClass += ' ring-4 ring-orange-300 scale-110';
+                                return `<button onclick="window.jumpToQuestion(${idx})" class="${btnClass}">${idx + 1}</button>`;
+                            }).join('')}
+                        </div>
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <div class="flex items-center space-x-2"><div class="w-4 h-4 bg-green-500 rounded"></div><span class="text-gray-600 dark:text-gray-400">Benar</span></div>
+                                <div class="flex items-center space-x-2"><div class="w-4 h-4 bg-red-500 rounded"></div><span class="text-gray-600 dark:text-gray-400">Salah</span></div>
+                                <div class="flex items-center space-x-2"><div class="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div><span class="text-gray-600 dark:text-gray-400">Kosong</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+        
+        const render = () => {
+            if (!isExamStarted) {
+                app.innerHTML = renderHome();
+            } else {
+                app.innerHTML = renderExam();
+            }
+        };
+        
+        // Expose functions to window
+        window.handleStartExam = handleStartExam;
+        window.handleAnswer = handleAnswer;
+        window.handleNext = handleNext;
+        window.handleRestart = handleRestart;
+        window.jumpToQuestion = jumpToQuestion;
+        
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
